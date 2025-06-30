@@ -10,18 +10,19 @@ import java.util.logging.Level;
 
 public class UserDaoJDBCImpl implements UserDao {
 private final Connection connection;
+private  final  Util util;
     private static final Logger LOGGER = Logger.getLogger(UserDaoJDBCImpl.class.getName().getClass());
 
     public UserDaoJDBCImpl() {
-        this.connection = Util.getConnection();
+        this.util = new Util();
+        this.connection = util.getConnection();
     }
 
     @Override
     public void createUsersTable() {
             try (Statement statement = connection.createStatement()) {
-                statement.execute("CREATE TABLE IF NOT EXISTS users (" + " id INT NOT NULL AUTO_INCREMENT," + " name VARCHAR(40)," + "lastName VARCHAR(40)," + "age INT," + "PRIMARY KEY(id));");
+                statement.execute("CREATE TABLE IF NOT EXISTS users( id INT NOT NULL AUTO_INCREMENT, name VARCHAR(40), lastName VARCHAR(40), age INT, PRIMARY KEY(id));");
             } catch (SQLException e) {
-                LOGGER.log(Level.INFO, "При создании таблицы возникла ошибка", e);
                 throw new RuntimeException("Ошибка при создании таблицы", e);
         }
     }
@@ -31,7 +32,6 @@ private final Connection connection;
             try (Statement statement = connection.createStatement()) {
                 statement.execute("DROP TABLE IF EXISTS users");
             } catch (SQLException e) {
-                LOGGER.log(Level.INFO, "При открытии соединения возникла ошибка", e);
                 throw new RuntimeException("При удалении пользователя возникла ошибка", e);
             }
         }
@@ -43,9 +43,7 @@ private final Connection connection;
                 preparedStatement.setString(2, lastName);
                 preparedStatement.setString(3, String.valueOf(age));
                 preparedStatement.executeUpdate();
-                System.out.println("Пользователь" + name + "успешно добавлен");
             } catch (SQLException e) {
-                LOGGER.log(Level.INFO, "При сохранении пользователя возникла ошибка", e);
                 throw new RuntimeException("При сохранении пользователя возникла ошибка", e);
             }
         }
@@ -56,7 +54,6 @@ private final Connection connection;
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
-                LOGGER.log(Level.INFO, "Ошибка при сохранении пользователя", e);
                 throw new RuntimeException("Ошибка при сохранении пользователя", e);
             }
         }
@@ -74,7 +71,6 @@ private final Connection connection;
                     userList.add(user);
                 }
             } catch (SQLException e) {
-                LOGGER.log(Level.INFO, "Возникла ошибка при извлечении пользователя", e);
                 throw new RuntimeException("Возникла ошибка при извлечении пользователя", e);
             }
         return userList;
@@ -85,7 +81,6 @@ private final Connection connection;
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate("TRUNCATE TABLE users");
             } catch (SQLException e) {
-                LOGGER.log(Level.INFO, "При очистки таблицы возникла ошибка", e);
                 throw new RuntimeException("При очистки таблицы возникла ошибка", e);
             }
         }

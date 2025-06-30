@@ -14,10 +14,10 @@ public final class Util {
     public static final String URL = "jdbc:mysql://localhost:3306/mydbtest";
     private static final Logger LOGGER = Logger.getLogger(Util.class.getName().getClass());
 
-    private Util() {
+    public Util() {
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {
