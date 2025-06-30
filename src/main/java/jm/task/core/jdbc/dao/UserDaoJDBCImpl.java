@@ -1,17 +1,14 @@
 package jm.task.core.jdbc.dao;
-import com.sun.istack.logging.Logger;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 public class UserDaoJDBCImpl implements UserDao {
 private final Connection connection;
 private  final  Util util;
-    private static final Logger LOGGER = Logger.getLogger(UserDaoJDBCImpl.class.getName().getClass());
 
     public UserDaoJDBCImpl() {
         this.util = new Util();
